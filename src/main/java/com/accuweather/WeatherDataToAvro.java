@@ -44,11 +44,11 @@ public class WeatherDataToAvro {
     Date date = new Date();
     String executionDate = dateFormat.format(date);
     fetchWeatherData(executionDate, options.inputDir, options.apiKey);
-    convertWeatherDataToAvro(sparkSession, executionDate, options.outputDir);
+    convertWeatherDataToAvro(sparkSession, executionDate, options.inputDir, options.outputDir);
   }
 
 
-  public static void convertWeatherDataToAvro(SparkSession sparkSession, String executionDate, String outputPathPrefix) {
+  public static void convertWeatherDataToAvro(SparkSession sparkSession, String executionDate, String inputPathPrefix, String outputPathPrefix) {
 
         Dataset<Row> sparkDataset = sparkSession.read()
                 .format("json")
@@ -56,7 +56,7 @@ public class WeatherDataToAvro {
                 .option("allowBackslashEscapingAnyCharacter", "true")
                 .option("primitivesAsString", "true")
                 .option("multiline", "true")
-                .load("input/weather_"+ executionDate +".json");
+                .load(inputPathPrefix +"/weather_"+ executionDate +".json");
         logger.info("Selecting the columns to build the dataset");
 
         Dataset<Row> selectedData = sparkDataset.select("EpochTime", "HasPrecipitation", "Temperature", "WeatherText");

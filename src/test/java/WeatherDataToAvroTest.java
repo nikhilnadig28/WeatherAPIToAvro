@@ -20,7 +20,8 @@ public class WeatherDataToAvroTest {
   private static Dataset<Row> sparkDataset;
   private static SparkSession sparkSession;
   private static Dataset<Row> avroDataset;
-  private static String executionDate;
+  private static String executionDate = "test";
+  private static String inputPathPrefix = "src/test/resources/input";
   private static String outputPathPrefix = "src/test/resources/output";
   private static String[] columnsInAvro = {"EpochTime", "HasPrecipitation", "Temperature", "WeatherText", "Hour", "Day", "Month", "Year", "DateTime", "Temperature_Imperial", "Temperature_Metric"};
   private static Logger logger = LogManager.getLogger(WeatherDataToAvro.class);
@@ -37,14 +38,11 @@ public class WeatherDataToAvroTest {
             .option("allowBackslashEscapingAnyCharacter", "true")
             .option("primitivesAsString", "true")
             .option("multiline", "true")
-            .load("src/test/resources/input/test_weather.json");
+            .load(inputPathPrefix + "/weather_test.json");
     logger.info("Created spark context");
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    Date date = new Date();
-    executionDate = dateFormat.format(date);
 
     logger.info("Converting JSON to AVRO");
-    convertWeatherDataToAvro(sparkSession, executionDate, outputPathPrefix);
+    convertWeatherDataToAvro(sparkSession, executionDate, inputPathPrefix, outputPathPrefix);
 
     //Loading data written as Avro to dataset
     avroDataset = sparkSession.read().format("avro").load(outputPathPrefix + "/weather_" + executionDate);
