@@ -1,6 +1,6 @@
 # Weather Data from API to AVRO
 
-This tool pulls data from the AccuWeather's `currentconditions` API for the last 24hours in Stockholm
+This tool pulls data from the AccuWeather's `currentconditions` API for the last 24 hours in Stockholm
 
 # Running Locally
 
@@ -17,7 +17,7 @@ mvn package
 ```
 We have the maven assembly plugin installed which will create a fat jar with all the necessary dependencies
 
-Then to execute the jar, run the following
+To execute the jar, run the following
 ```
 spark-submit --master local --class com.accuweather.WeatherDataToAvro target/WeatherAPIToAvro-1.0-SNAPSHOT-jar-with-dependencies.jar --inputDir input --outputDir output --apiKey <add your key here>
 ```
